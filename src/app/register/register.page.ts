@@ -20,6 +20,7 @@ export class RegisterPage {
     const response = await fetch(
       'https://wtag-api.supermegadex.net/api/v1/register',
       {
+        method: 'post',
         headers: {
           'Content-Type': 'application/json'
         },
