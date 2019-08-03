@@ -30,8 +30,8 @@ export class DashPage implements OnInit {
     const response = await fetch(
       `https://wtag-api.supermegadex.net/api/v1/images?tags=${this.tags.join(
         ','
-      )}&max=${this.maxImagesPerPart}&skip=${this.part *
-        this.maxImagesPerPart}`,
+      )}&max=${this.maxImagesPerPart}&skip=${part ||
+        this.part * this.maxImagesPerPart}`,
       {
         headers: {
           'Auth-Token': localStorage.getItem('token')
@@ -72,6 +72,7 @@ export class DashPage implements OnInit {
     });
     await modal.present();
     await modal.onDidDismiss();
-    this.getImages(0);
+    this.part = 0;
+    this.getImages();
   }
 }
