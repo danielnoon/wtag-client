@@ -65,4 +65,8 @@ export class ImageEditorComponent implements OnInit {
       });
     }
   }
+
+  dismiss() {
+    this.modal.dismiss();
+  }
 }

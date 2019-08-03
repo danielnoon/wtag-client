@@ -23,15 +23,12 @@ export class DashPage implements OnInit {
     this.getImages();
   }
 
-  async getImages(part?: number) {
-    if (part) {
-      this.part = part;
-    }
+  async getImages() {
     const response = await fetch(
       `https://wtag-api.supermegadex.net/api/v1/images?tags=${this.tags.join(
         ','
-      )}&max=${this.maxImagesPerPart}&skip=${part ||
-        this.part * this.maxImagesPerPart}`,
+      )}&max=${this.maxImagesPerPart}&skip=${this.part *
+        this.maxImagesPerPart}`,
       {
         headers: {
           'Auth-Token': localStorage.getItem('token')
@@ -39,19 +36,24 @@ export class DashPage implements OnInit {
       }
     );
     const all = ((await response.json()) as { images: IImage[] }).images;
+    if (all.length === 0) {
+      return false;
+    }
+    this.allImages.push(...all);
     const rows: IImage[][] = [];
     let row = 0;
-    for (const image of all) {
+    for (const image of this.allImages) {
       if (!rows[row]) {
         rows[row] = [];
       }
       rows[row].push(image);
-      if (rows[row].length > this.columns) {
+      if (rows[row].length >= this.columns) {
         row++;
       }
     }
     this.images = rows;
     this.part++;
+    return true;
   }
 
   async openImageEditor(image: IImage) {
@@ -72,7 +74,19 @@ export class DashPage implements OnInit {
     });
     await modal.present();
     await modal.onDidDismiss();
+    this.refresh();
+  }
+
+  async loadData(ev) {
+    const loadMore = await this.getImages();
+    ev.target.complete();
+    if (!loadMore) {
+      ev.target.disabled = true;
+    }
+  }
+
+  refresh() {
+    this.allImages = [];
     this.part = 0;
-    this.getImages();
   }
 }

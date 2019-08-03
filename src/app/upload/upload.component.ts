@@ -57,4 +57,8 @@ export class UploadComponent implements OnInit {
     }
     this.modal.dismiss();
   }
+
+  dismiss() {
+    this.modal.dismiss();
+  }
 }
