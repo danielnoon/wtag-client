@@ -1,21 +1,37 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Register an account for WTag</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>WTag Login</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-input placeholder="Username"></ion-input>
-  <ion-input placeholder="Password"></ion-input>
-  <ion-input placeholder="Confirm Password"></ion-input>
-  <ion-input placeholder="Access Code"></ion-input>
-  <ion-button>Register</ion-button>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button color="primary" size="small">Already have an account? Log in here!</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+  <ion-card class="main">
+    <ion-card-header>
+      <ion-card-title>Hello, there!</ion-card-title>
+      <ion-card-subtitle>Register</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list inset="false">
+        <ion-item>
+          <ion-label position="floating">Username</ion-label>
+          <ion-input [(ngModel)]="username"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Password</ion-label>
+          <ion-input [(ngModel)]="password" type="password"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Access Code</ion-label>
+          <ion-input [(ngModel)]="accessCode"></ion-input>
+        </ion-item>
+        <ion-item button detail color="primary" (click)="register()">
+          Register
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>Alrady have an account? Log In!</ion-label>
+          <ion-button href="/login">Log In</ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
-
-
-
