@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { sha256 } from 'sha.js';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,7 @@ export class LoginPage {
   username: string;
   password: string;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   async login() {
     console.log(`Hello, ${this.username}!`);
@@ -24,6 +25,8 @@ export class LoginPage {
         headers: { 'Content-Type': 'application/json' }
       }
     );
-    console.log(await result.json());
+    const json = (await result.json()) as { token: string };
+    localStorage.setItem('token', json.token);
+    this.router.navigateByUrl('/dash');
   }
 }

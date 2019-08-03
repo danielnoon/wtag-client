@@ -1,0 +1,19 @@
+.top {
+  height: 50%;
+  padding: 25px;
+  display: flex;
+
+  .waifu {
+    max-height: 100%;
+    max-width: 100%;
+    margin: auto;
+  }
+}
+
+.bottom {
+  height: 50%;
+
+  .tags {
+    padding: 25px;
+  }
+}

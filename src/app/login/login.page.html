@@ -1,33 +1,35 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>WTag Login</ion-title>
+    <ion-title>WTag</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card class="main">
-    <ion-card-header>
-      <ion-card-title>Welcome back!</ion-card-title>
-      <ion-card-subtitle>Log in</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list inset="false">
-        <ion-item>
-          <ion-label position="floating">Username</ion-label>
-          <ion-input [(ngModel)]="username"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Password</ion-label>
-          <ion-input [(ngModel)]="password" type="password"></ion-input>
-        </ion-item>
-        <ion-item button detail color="primary" (click)="login()"
-          >Login</ion-item
-        >
-        <ion-item lines="none">
-          <ion-label>Don't have an account? Register now!</ion-label>
-          <ion-button href="/register">Register</ion-button>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+  <div class="ion-padding">
+    <ion-card class="main">
+      <ion-card-header>
+        <ion-card-title>Welcome back!</ion-card-title>
+        <ion-card-subtitle>Log in</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list inset="false">
+          <ion-item>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input [(ngModel)]="username"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input [(ngModel)]="password" type="password"></ion-input>
+          </ion-item>
+          <ion-item button detail color="primary" (click)="login()"
+            >Login</ion-item
+          >
+          <ion-item lines="none">
+            <ion-label>Don't have an account? Register now!</ion-label>
+            <ion-button routerLink="/register">Register</ion-button>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

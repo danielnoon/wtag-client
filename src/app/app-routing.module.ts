@@ -11,7 +11,8 @@ const routes: Routes = [
   {
     path: 'register',
     loadChildren: './register/register.module#RegisterPageModule'
-  }
+  },  { path: 'dash', loadChildren: './dash/dash.module#DashPageModule' }
+
 ];
 
 @NgModule({

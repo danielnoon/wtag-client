@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { sha256 } from 'sha.js';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +12,7 @@ export class RegisterPage {
   password = '';
   accessCode = '';
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   async register() {
     const hashedPassword = new sha256()
@@ -31,6 +32,8 @@ export class RegisterPage {
         })
       }
     );
-    console.log(await response.json());
+    const json = (await response.json()) as { token: string };
+    localStorage.setItem('token', json.token);
+    this.router.navigateByUrl('/dash');
   }
 }

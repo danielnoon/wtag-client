@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<div class="top">
+  <img [src]="imageUrl" class="waifu" />
+</div>
+<div class="bottom">
+  <ion-item>
+    <ion-label position="floating">Add Tag</ion-label>
+    <ion-input
+      autofocus
+      [(ngModel)]="newTag"
+      (keypress)="checkCommit($event)"
+    ></ion-input>
+  </ion-item>
+  <div class="tags">
+    <ion-chip
+      class="tag-chip"
+      *ngFor="let tag of tags; let idx = index"
+      color="secondary"
+    >
+      <ion-label>{{ tag }}</ion-label>
+      <ion-icon name="close-circle" (click)="removeTag(idx)"></ion-icon>
+    </ion-chip>
+  </div>
+</div>
+
+<ion-fab vertical="bottom" horizontal="end">
+  <ion-fab-button (click)="save()">
+    <ion-icon icon="save"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

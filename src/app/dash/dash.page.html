@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>WTag</ion-title>
+    <ion-buttons slot="secondary">
+      <ion-button (click)="openImageUploader()">
+        <ion-icon icon="add" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-padding">
+    <ion-grid>
+      <ion-row *ngFor="let row of images">
+        <ion-col
+          size="1"
+          *ngFor="let image of row"
+          class="image-column"
+          (click)="openImageEditor(image)"
+        >
+          <ion-img
+            class="image"
+            [src]="image.baseUrl + '/' + image.hash + '.' + image.fileExt"
+          ></ion-img>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
