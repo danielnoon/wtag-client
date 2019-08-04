@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IImage } from 'src/models/image.model';
-import { ModalController } from '@ionic/angular';
+import { ModalController, IonInfiniteScroll } from '@ionic/angular';
 import { ImageEditorComponent } from '../image-editor/image-editor.component';
 import { UploadComponent } from '../upload/upload.component';
 
@@ -16,6 +16,8 @@ export class DashPage implements OnInit {
   part = 0;
   maxImagesPerPart = 20;
   columns = 3;
+  @ViewChild(IonInfiniteScroll, { static: false })
+  infiniteScroll: IonInfiniteScroll;
 
   constructor(private modalController: ModalController) {}
 
@@ -104,9 +106,12 @@ export class DashPage implements OnInit {
     }
   }
 
-  refresh() {
+  async refresh() {
+    this.infiniteScroll.disabled = false;
     this.allImages = [];
     this.part = 0;
+    await this.getImages();
+    await this.getImages();
     this.getImages();
   }
 }
