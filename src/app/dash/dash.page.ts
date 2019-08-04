@@ -106,6 +106,7 @@ export class DashPage implements OnInit {
     if (data) {
       image.tags = data.tags as string[];
     }
+    this.updateTags();
   }
 
   async openImageUploader() {
@@ -129,6 +130,7 @@ export class DashPage implements OnInit {
     this.infiniteScroll.disabled = false;
     this.allImages = [];
     this.part = 0;
+    this.updateTags();
     await this.getImages();
     await this.getImages();
     this.getImages();
