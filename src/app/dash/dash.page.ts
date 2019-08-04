@@ -25,10 +25,9 @@ export class DashPage implements OnInit {
 
   async getImages() {
     const response = await fetch(
-      `https://wtag-api.supermegadex.net/api/v1/images?tags=${this.tags.join(
-        ','
-      )}&max=${this.maxImagesPerPart}&skip=${this.part *
-        this.maxImagesPerPart}`,
+      `https://wtag-api.supermegadex.net/api/v1/images?tags=${this.tags}&max=${
+        this.maxImagesPerPart
+      }&skip=${this.part * this.maxImagesPerPart}`,
       {
         headers: {
           'Auth-Token': localStorage.getItem('token')
@@ -88,5 +87,6 @@ export class DashPage implements OnInit {
   refresh() {
     this.allImages = [];
     this.part = 0;
+    this.getImages();
   }
 }

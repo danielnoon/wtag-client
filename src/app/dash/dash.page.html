@@ -1,7 +1,13 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>WTag</ion-title>
-    <ion-buttons slot="secondary">
+  <ion-toolbar color="primary">
+    <ion-title slot="start">WTag</ion-title>
+    <ion-searchbar
+      slot="secondary"
+      [(ngModel)]="tags"
+      (ionChange)="refresh()"
+      debounce="500"
+    ></ion-searchbar>
+    <ion-buttons slot="end">
       <ion-button (click)="openImageUploader()">
         <ion-icon icon="add" slot="icon-only"></ion-icon>
       </ion-button>
