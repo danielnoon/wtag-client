@@ -23,7 +23,7 @@
     <ion-grid>
       <ion-row *ngFor="let row of images">
         <ion-col
-          size="1"
+          [size]="12 / columns"
           *ngFor="let image of row"
           class="image-column"
           (click)="openImageEditor(image)"

@@ -15,12 +15,32 @@ export class DashPage implements OnInit {
   allImages: IImage[] = [];
   part = 0;
   maxImagesPerPart = 20;
-  columns = 12;
+  columns = 3;
 
   constructor(private modalController: ModalController) {}
 
-  ngOnInit() {
-    this.getImages();
+  async ngOnInit() {
+    this.updateColumns();
+    await this.getImages();
+    await this.getImages();
+    await this.getImages();
+  }
+
+  updateColumns() {
+    const w = window.innerWidth;
+    if (w <= 320) {
+      this.columns = 2;
+    } else if (w <= 425) {
+      this.columns = 3;
+    } else if (w <= 768) {
+      this.columns = 4;
+    } else if (w <= 1024) {
+      this.columns = 6;
+    } else if (w <= 1440) {
+      this.columns = 8;
+    } else {
+      this.columns = 12;
+    }
   }
 
   async getImages() {
