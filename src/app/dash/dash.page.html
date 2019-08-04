@@ -8,6 +8,9 @@
       debounce="500"
     ></ion-searchbar>
     <ion-buttons slot="end">
+      <ion-button (click)="refresh()">
+        <ion-icon icon="refresh" slot="icon-only"></ion-icon>
+      </ion-button>
       <ion-button (click)="openImageUploader()">
         <ion-icon icon="add" slot="icon-only"></ion-icon>
       </ion-button>
