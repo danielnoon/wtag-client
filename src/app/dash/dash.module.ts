@@ -9,6 +9,7 @@ import { IonicModule } from '@ionic/angular';
 import { DashPage } from './dash.page';
 import { ImageEditorComponent } from '../image-editor/image-editor.component';
 import { UploadComponent } from '../upload/upload.component';
+import { AddTagComponent } from '../add-tag/add-tag.component';
 
 const routes: Routes = [
   {
@@ -25,7 +26,12 @@ const routes: Routes = [
     FileUploadModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [DashPage, ImageEditorComponent, UploadComponent],
-  entryComponents: [ImageEditorComponent, UploadComponent]
+  declarations: [
+    DashPage,
+    ImageEditorComponent,
+    UploadComponent,
+    AddTagComponent
+  ],
+  entryComponents: [ImageEditorComponent, UploadComponent, AddTagComponent]
 })
 export class DashPageModule {}

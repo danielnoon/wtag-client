@@ -10,7 +10,8 @@ import { UploadComponent } from '../upload/upload.component';
   styleUrls: ['./dash.page.scss']
 })
 export class DashPage implements OnInit {
-  tags: string[] = [];
+  tags = '';
+  allTags: string[] = [];
   images: IImage[][] = [];
   allImages: IImage[] = [];
   part = 0;
@@ -22,10 +23,25 @@ export class DashPage implements OnInit {
   constructor(private modalController: ModalController) {}
 
   async ngOnInit() {
+    this.updateTags();
     this.updateColumns();
     await this.getImages();
     await this.getImages();
     await this.getImages();
+  }
+
+  async updateTags() {
+    const response = await fetch(
+      'https://wtag-api.supermegadex.net/api/v1/tags',
+      {
+        method: 'get',
+        headers: {
+          'Auth-Token': localStorage.getItem('token')
+        }
+      }
+    );
+    const json = await response.json();
+    this.allTags = json.tags as string[];
   }
 
   updateColumns() {
@@ -81,12 +97,15 @@ export class DashPage implements OnInit {
     const modal = await this.modalController.create({
       component: ImageEditorComponent,
       componentProps: {
-        image
+        image,
+        allTags: this.allTags
       }
     });
     await modal.present();
     const { data } = await modal.onDidDismiss();
-    image.tags = data.tags as string[];
+    if (data) {
+      image.tags = data.tags as string[];
+    }
   }
 
   async openImageUploader() {

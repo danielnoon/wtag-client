@@ -13,15 +13,37 @@
   <img [src]="imageUrl" class="waifu" />
 </div>
 <div class="bottom">
-  <ion-item>
+  <!-- <ion-item>
     <ion-label position="floating">Add Tag</ion-label>
     <ion-input
       autofocus
       [(ngModel)]="newTag"
       (keypress)="checkCommit($event)"
     ></ion-input>
-  </ion-item>
-  <div class="tags">
+  </ion-item> -->
+  <!-- <ion-button (click)="openAddTagPopover($event)">
+    <ion-icon icon="add" slot="start"></ion-icon>
+    <ion-label slot="end">Add Tags</ion-label>
+  </ion-button> -->
+  <div class="pane left">
+    <ion-item>
+      <ion-icon icon="add" slot="start"></ion-icon>
+      <ion-label position="floating">New Tag</ion-label>
+      <ion-input
+        [(ngModel)]="newTag"
+        (ionChange)="updateSuggestedTags()"
+      ></ion-input>
+    </ion-item>
+    <ion-list>
+      <ion-item
+        button
+        *ngFor="let tag of suggestedTags"
+        (click)="chooseSuggestion(tag)"
+        >{{ tag }}</ion-item
+      >
+    </ion-list>
+  </div>
+  <div class="pane right">
     <ion-chip
       class="tag-chip"
       *ngFor="let tag of tags; let idx = index"
