@@ -25,6 +25,16 @@
     <ion-icon icon="add" slot="start"></ion-icon>
     <ion-label slot="end">Add Tags</ion-label>
   </ion-button> -->
+  <div class="pane right">
+    <ion-chip
+      class="tag-chip"
+      *ngFor="let tag of tags; let idx = index"
+      color="secondary"
+    >
+      <ion-label>{{ tag }}</ion-label>
+      <ion-icon name="close-circle" (click)="removeTag(idx)"></ion-icon>
+    </ion-chip>
+  </div>
   <div class="pane left">
     <ion-item>
       <ion-icon icon="add" slot="start"></ion-icon>
@@ -32,6 +42,7 @@
       <ion-input
         [(ngModel)]="newTag"
         (ionChange)="updateSuggestedTags()"
+        (keypress)="change($event)"
       ></ion-input>
     </ion-item>
     <ion-list>
@@ -42,16 +53,6 @@
         >{{ tag }}</ion-item
       >
     </ion-list>
-  </div>
-  <div class="pane right">
-    <ion-chip
-      class="tag-chip"
-      *ngFor="let tag of tags; let idx = index"
-      color="secondary"
-    >
-      <ion-label>{{ tag }}</ion-label>
-      <ion-icon name="close-circle" (click)="removeTag(idx)"></ion-icon>
-    </ion-chip>
   </div>
 </div>
 
