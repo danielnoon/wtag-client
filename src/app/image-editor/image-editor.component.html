@@ -9,11 +9,14 @@
   </ion-toolbar>
 </ion-header>
 
-<div class="top">
-  <img [src]="imageUrl" class="waifu" />
-</div>
-<div class="bottom">
-  <!-- <ion-item>
+<ion-content>
+  <div class="top">
+    <div class="image-wrapper">
+      <img [src]="imageUrl" class="waifu" />
+    </div>
+  </div>
+  <div class="bottom">
+    <!-- <ion-item>
     <ion-label position="floating">Add Tag</ion-label>
     <ion-input
       autofocus
@@ -21,43 +24,44 @@
       (keypress)="checkCommit($event)"
     ></ion-input>
   </ion-item> -->
-  <!-- <ion-button (click)="openAddTagPopover($event)">
+    <!-- <ion-button (click)="openAddTagPopover($event)">
     <ion-icon icon="add" slot="start"></ion-icon>
     <ion-label slot="end">Add Tags</ion-label>
   </ion-button> -->
-  <div class="pane right">
-    <ion-chip
-      class="tag-chip"
-      *ngFor="let tag of tags; let idx = index"
-      color="secondary"
-    >
-      <ion-label>{{ tag }}</ion-label>
-      <ion-icon name="close-circle" (click)="removeTag(idx)"></ion-icon>
-    </ion-chip>
-  </div>
-  <div class="pane left">
-    <ion-item>
-      <ion-icon icon="add" slot="start"></ion-icon>
-      <ion-label position="floating">New Tag</ion-label>
-      <ion-input
-        [(ngModel)]="newTag"
-        (ionChange)="updateSuggestedTags()"
-        (keypress)="change($event)"
-      ></ion-input>
-    </ion-item>
-    <ion-list>
-      <ion-item
-        button
-        *ngFor="let tag of suggestedTags"
-        (click)="chooseSuggestion(tag)"
-        >{{ tag }}</ion-item
+    <div class="pane right">
+      <ion-chip
+        class="tag-chip"
+        *ngFor="let tag of tags; let idx = index"
+        color="secondary"
       >
-    </ion-list>
+        <ion-label>{{ tag }}</ion-label>
+        <ion-icon name="close-circle" (click)="removeTag(idx)"></ion-icon>
+      </ion-chip>
+    </div>
+    <div class="pane left">
+      <ion-item>
+        <ion-icon icon="add" slot="start"></ion-icon>
+        <ion-label position="floating">New Tag</ion-label>
+        <ion-input
+          [(ngModel)]="newTag"
+          (ionChange)="updateSuggestedTags()"
+          (keypress)="change($event)"
+        ></ion-input>
+      </ion-item>
+      <ion-list>
+        <ion-item
+          button
+          *ngFor="let tag of suggestedTags"
+          (click)="chooseSuggestion(tag)"
+          >{{ tag }}</ion-item
+        >
+      </ion-list>
+    </div>
   </div>
-</div>
 
-<ion-fab vertical="bottom" horizontal="end">
-  <ion-fab-button (click)="save()">
-    <ion-icon icon="save"></ion-icon>
-  </ion-fab-button>
-</ion-fab>
+  <ion-fab vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="save()">
+      <ion-icon icon="save"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
