@@ -27,17 +27,18 @@
       </ion-chip>
     </div>
     <div class="pane left">
-      <ion-item>
-        <ion-icon icon="add" slot="start"></ion-icon>
-        <ion-label position="floating">New Tag</ion-label>
+      <ion-item class="add-input">
+        <ion-label position="floating">+ Add Tag</ion-label>
         <ion-input
+          #input
           [(ngModel)]="newTag"
           (ionChange)="updateSuggestedTags()"
-          (keypress)="change($event)"
+          (keyup)="change($event)"
         ></ion-input>
       </ion-item>
       <ion-list>
         <ion-item
+          #suggestion
           button
           *ngFor="let tag of suggestedTags"
           (click)="chooseSuggestion(tag)"

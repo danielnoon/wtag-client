@@ -96,14 +96,18 @@ export class DashPage implements OnInit {
       component: ImageEditorComponent,
       componentProps: {
         image,
-        allTags: this.allTags
+        allTags: this.allTags,
+        commitSave: (tags: string[]) => {
+          console.log(tags);
+          image.tags = tags;
+        }
       }
     });
     await modal.present();
-    const { data } = await modal.onDidDismiss();
-    if (data) {
-      image.tags = data.tags as string[];
-    }
+    await modal.onDidDismiss();
+    // if (data) {
+    //   image.tags = data.tags as string[];
+    // }
     this.updateTags();
   }
 

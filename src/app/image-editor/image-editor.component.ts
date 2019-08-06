@@ -1,5 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { NavParams, ModalController, PopoverController } from '@ionic/angular';
+import {
+  Component,
+  OnInit,
+  ViewChildren,
+  QueryList,
+  ViewChild
+} from '@angular/core';
+import {
+  NavParams,
+  ModalController,
+  PopoverController,
+  IonItem,
+  IonInput
+} from '@ionic/angular';
 import { IImage } from 'src/models/image.model';
 import { AddTagComponent } from '../add-tag/add-tag.component';
 import * as Fuse from 'fuse.js';
@@ -18,6 +30,10 @@ export class ImageEditorComponent implements OnInit {
   allTags: string[];
   suggestedTags: string[];
   fuse: Fuse<string>;
+  focus = 0;
+  commitSave: (tags: string[]) => void;
+  @ViewChildren('suggestion') suggestions: QueryList<IonItem & { el: Element }>;
+  @ViewChild('input', { static: false }) input: IonInput & { el: Element };
 
   constructor(
     navParams: NavParams,
@@ -31,6 +47,7 @@ export class ImageEditorComponent implements OnInit {
     this.imageUrl = `${image.baseUrl}/${image.hash}.${image.fileExt}`;
     this.allTags = navParams.get('allTags') as string[];
     this.fuse = new Fuse(this.allTags, {});
+    this.commitSave = navParams.get('commitSave');
   }
 
   ngOnInit() {}
@@ -41,6 +58,7 @@ export class ImageEditorComponent implements OnInit {
   }
 
   async save() {
+    console.log('wtf');
     if (this.tags.length > 1) {
       this.tags = this.tags.filter(tag => tag !== 'untagged');
     }
@@ -64,6 +82,8 @@ export class ImageEditorComponent implements OnInit {
     const json = (await result.json()) as { success: boolean };
     if (!json.success) {
       alert('Something failed.');
+    } else {
+      this.commitSave(this.tags);
     }
   }
 
@@ -84,16 +104,23 @@ export class ImageEditorComponent implements OnInit {
       this.suggestedTags = [];
     } else {
       const order = this.fuse.search(this.newTag);
-      this.suggestedTags = order.slice(0, 5).map(idx => this.allTags[idx]);
+      this.suggestedTags = order
+        .map(idx => this.allTags[idx])
+        .filter(tag => !this.tags.includes(tag));
     }
   }
 
   change(ev: KeyboardEvent) {
-    if (ev.code === 'Enter') {
-      if (this.newTag.length > 0) {
-        this.tags = [...this.tags, this.newTag];
-        this.newTag = '';
-        this.save();
+    if (this.tags.includes(this.newTag)) {
+      this.input.color = 'danger';
+    } else {
+      this.input.color = 'light';
+      if (ev.code === 'Enter') {
+        if (this.newTag.length > 0) {
+          this.tags = [...this.tags, this.newTag];
+          this.newTag = '';
+          this.save();
+        }
       }
     }
     this.updateSuggestedTags();
