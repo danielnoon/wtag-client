@@ -21,26 +21,36 @@
       Drop files here...
     </div>
 
-    <ion-button class="file-input-container">
-      <label>
-        <input type="file" ng2FileSelect [uploader]="uploader" multiple />
-        Add Files
-      </label>
-    </ion-button>
+    <div class="add-files-button">
+      <ion-button class="file-input-container">
+        <label>
+          <input
+            type="file"
+            ng2FileSelect
+            [uploader]="uploader"
+            multiple
+            accept="image/png, image/jpeg"
+          />
+          Add Files
+        </label>
+      </ion-button>
+    </div>
 
-    <ion-list>
-      <ion-reorder-group
-        (ionItemReorder)="reorderFiles($event)"
-        disabled="false"
-      >
-        <ion-item *ngFor="let item of uploader.queue">
-          <ion-label>
-            {{ item?.file?.name }}
-          </ion-label>
-          <ion-reorder></ion-reorder>
-        </ion-item>
-      </ion-reorder-group>
-    </ion-list>
+    <div class="files-list">
+      <ion-list>
+        <ion-reorder-group
+          (ionItemReorder)="reorderFiles($event)"
+          disabled="false"
+        >
+          <ion-item *ngFor="let item of uploader.queue">
+            <ion-label>
+              {{ item?.file?.name }}
+            </ion-label>
+            <ion-reorder></ion-reorder>
+          </ion-item>
+        </ion-reorder-group>
+      </ion-list>
+    </div>
 
     <ion-fab vertical="bottom" horizontal="end">
       <ion-fab-button (click)="uploadAll()">

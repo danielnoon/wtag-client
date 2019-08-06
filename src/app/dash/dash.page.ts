@@ -15,7 +15,7 @@ export class DashPage implements OnInit {
   images: IImage[][] = [];
   allImages: IImage[] = [];
   part = 0;
-  maxImagesPerPart = 100;
+  maxImagesPerPart = 500;
   columns = 3;
   @ViewChild(IonInfiniteScroll, { static: false })
   infiniteScroll: IonInfiniteScroll;

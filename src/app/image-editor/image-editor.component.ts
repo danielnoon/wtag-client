@@ -37,6 +37,7 @@ export class ImageEditorComponent implements OnInit {
 
   removeTag(idx: number) {
     this.tags.splice(idx, 1);
+    this.save();
   }
 
   async save() {
@@ -61,10 +62,8 @@ export class ImageEditorComponent implements OnInit {
       }
     );
     const json = (await result.json()) as { success: boolean };
-    if (json.success) {
-      this.modal.dismiss({
-        tags: this.tags
-      });
+    if (!json.success) {
+      alert('Something failed.');
     }
   }
 
@@ -94,6 +93,7 @@ export class ImageEditorComponent implements OnInit {
       if (this.newTag.length > 0) {
         this.tags = [...this.tags, this.newTag];
         this.newTag = '';
+        this.save();
       }
     }
     this.updateSuggestedTags();
@@ -103,9 +103,12 @@ export class ImageEditorComponent implements OnInit {
     this.newTag = '';
     this.tags = [...this.tags, tag];
     this.updateSuggestedTags();
+    this.save();
   }
 
   dismiss() {
-    this.modal.dismiss();
+    this.modal.dismiss({
+      tags: this.tags
+    });
   }
 }

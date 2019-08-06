@@ -10,6 +10,7 @@ import { DashPage } from './dash.page';
 import { ImageEditorComponent } from '../image-editor/image-editor.component';
 import { UploadComponent } from '../upload/upload.component';
 import { AddTagComponent } from '../add-tag/add-tag.component';
+import { LightboxComponent } from '../lightbox/lightbox.component';
 
 const routes: Routes = [
   {
@@ -30,8 +31,14 @@ const routes: Routes = [
     DashPage,
     ImageEditorComponent,
     UploadComponent,
-    AddTagComponent
+    AddTagComponent,
+    LightboxComponent
   ],
-  entryComponents: [ImageEditorComponent, UploadComponent, AddTagComponent]
+  entryComponents: [
+    ImageEditorComponent,
+    UploadComponent,
+    AddTagComponent,
+    LightboxComponent
+  ]
 })
 export class DashPageModule {}

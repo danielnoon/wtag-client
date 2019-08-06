@@ -9,7 +9,6 @@
 }
 
 .file-input-container {
-  float: right;
   cursor: pointer;
 
   input[type='file'] {
@@ -19,4 +18,8 @@
 
 .nv-file-over {
   border: dotted 3px red;
+}
+
+.add-files-button {
+  text-align: right;
 }
