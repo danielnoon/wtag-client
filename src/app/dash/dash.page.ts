@@ -15,7 +15,7 @@ export class DashPage implements OnInit {
   images: IImage[][] = [];
   allImages: IImage[] = [];
   part = 0;
-  maxImagesPerPart = 20;
+  maxImagesPerPart = 100;
   columns = 3;
   @ViewChild(IonInfiniteScroll, { static: false })
   infiniteScroll: IonInfiniteScroll;
@@ -25,9 +25,7 @@ export class DashPage implements OnInit {
   async ngOnInit() {
     this.updateTags();
     this.updateColumns();
-    await this.getImages();
-    await this.getImages();
-    await this.getImages();
+    this.getImages();
   }
 
   async updateTags() {
@@ -131,8 +129,6 @@ export class DashPage implements OnInit {
     this.allImages = [];
     this.part = 0;
     this.updateTags();
-    await this.getImages();
-    await this.getImages();
     this.getImages();
   }
 }

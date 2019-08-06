@@ -21,19 +21,21 @@
 <ion-content>
   <div class="ion-padding">
     <ion-grid>
-      <ion-row *ngFor="let row of images">
-        <ion-col
-          [size]="12 / columns"
-          *ngFor="let image of row"
-          class="image-column"
-          (click)="openImageEditor(image)"
-        >
-          <ion-img
-            class="image"
-            [src]="image.baseUrl + '/' + image.hash + '.' + image.fileExt"
-          ></ion-img>
-        </ion-col>
-      </ion-row>
+      <ion-virtual-scroll [items]="images" approxItemHeight="150px">
+        <ion-row *virtualItem="let row" [style.height]="100 / columns + 'vw'">
+          <ion-col
+            [size]="12 / columns"
+            *ngFor="let image of row"
+            class="image-column"
+            (click)="openImageEditor(image)"
+          >
+            <ion-img
+              class="image"
+              [src]="image.baseUrl + '/' + image.hash + '.' + image.fileExt"
+            ></ion-img>
+          </ion-col>
+        </ion-row>
+      </ion-virtual-scroll>
     </ion-grid>
 
     <ion-infinite-scroll (ionInfinite)="loadData($event)">
