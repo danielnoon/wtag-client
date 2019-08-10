@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { sha256 } from 'sha.js';
 import { Router } from '@angular/router';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-register',
@@ -10,17 +11,23 @@ import { Router } from '@angular/router';
 export class RegisterPage {
   username = '';
   password = '';
-  accessCode = '';
+  url = localStorage.getItem('apiUrl') || '';
+  accessCode = localStorage.getItem('initCode') || '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private api: ApiService) {}
+
+  submit() {
+    this.register();
+  }
 
   async register() {
-    const hashedPassword = new sha256()
-      .update(this.password + 'wtag')
-      .digest('hex');
-    const response = await fetch(
-      'https://wtag-api.supermegadex.net/api/v1/register',
-      {
+    const correct = await this.api.checkApiUrl(this.url);
+    if (correct) {
+      const hashedPassword = new sha256()
+        .update(this.password + 'wtag')
+        .digest('hex');
+      const response = await this.api.request<{ token: string }>({
+        route: 'register',
         method: 'post',
         headers: {
           'Content-Type': 'application/json'
@@ -30,10 +37,11 @@ export class RegisterPage {
           password: hashedPassword,
           accessCode: this.accessCode
         })
+      });
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+        this.router.navigateByUrl('/dash');
       }
-    );
-    const json = (await response.json()) as { token: string };
-    localStorage.setItem('token', json.token);
-    this.router.navigateByUrl('/dash');
+    }
   }
 }

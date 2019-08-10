@@ -11,8 +11,14 @@
       <ion-button (click)="refresh()">
         <ion-icon icon="refresh" slot="icon-only"></ion-icon>
       </ion-button>
+      <ion-button (click)="openSortPopover($event)">
+        <ion-icon icon="funnel" slot="icon-only"></ion-icon>
+      </ion-button>
       <ion-button (click)="openImageUploader()">
         <ion-icon icon="cloud-upload" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button (click)="openLogoutPopover($event)">
+        <ion-icon icon="log-out" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -21,7 +27,11 @@
 <ion-content>
   <div class="ion-padding">
     <ion-grid>
-      <ion-virtual-scroll [items]="images" approxItemHeight="150px">
+      <ion-virtual-scroll
+        [items]="images"
+        approxItemHeight="150px"
+        [trackBy]="track"
+      >
         <ion-row *virtualItem="let row" [style.height]="100 / columns + 'vw'">
           <ion-col
             [size]="12 / columns"
@@ -31,7 +41,9 @@
           >
             <ion-img
               class="image"
-              [src]="image.baseUrl + '/' + image.hash + '.' + image.fileExt"
+              [src]="
+                image.baseUrl + '/' + image.hash + '-thumbnail.' + image.fileExt
+              "
             ></ion-img>
           </ion-col>
         </ion-row>

@@ -1,8 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IImage } from 'src/models/image.model';
-import { ModalController, IonInfiniteScroll } from '@ionic/angular';
+import {
+  ModalController,
+  IonInfiniteScroll,
+  PopoverController
+} from '@ionic/angular';
 import { ImageEditorComponent } from '../image-editor/image-editor.component';
 import { UploadComponent } from '../upload/upload.component';
+import { ApiService } from '../api.service';
+import { SortComponent } from '../sort/sort.component';
+import { LogoutComponent } from '../logout/logout.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dash',
@@ -17,10 +25,16 @@ export class DashPage implements OnInit {
   part = 0;
   maxImagesPerPart = 500;
   columns = 3;
+  sortBy = 'name';
   @ViewChild(IonInfiniteScroll, { static: false })
   infiniteScroll: IonInfiniteScroll;
 
-  constructor(private modalController: ModalController) {}
+  constructor(
+    private modalController: ModalController,
+    private api: ApiService,
+    private popover: PopoverController,
+    private router: Router
+  ) {}
 
   async ngOnInit() {
     this.updateTags();
@@ -29,17 +43,14 @@ export class DashPage implements OnInit {
   }
 
   async updateTags() {
-    const response = await fetch(
-      'https://wtag-api.supermegadex.net/api/v1/tags',
-      {
-        method: 'get',
-        headers: {
-          'Auth-Token': localStorage.getItem('token')
-        }
+    const response = await this.api.request<{ tags: string[] }>({
+      route: 'tags',
+      method: 'get',
+      headers: {
+        'Auth-Token': localStorage.getItem('token')
       }
-    );
-    const json = await response.json();
-    this.allTags = json.tags as string[];
+    });
+    this.allTags = response.tags;
   }
 
   updateColumns() {
@@ -60,17 +71,16 @@ export class DashPage implements OnInit {
   }
 
   async getImages() {
-    const response = await fetch(
-      `https://wtag-api.supermegadex.net/api/v1/images?tags=${this.tags}&max=${
-        this.maxImagesPerPart
-      }&skip=${this.part * this.maxImagesPerPart}`,
-      {
-        headers: {
-          'Auth-Token': localStorage.getItem('token')
-        }
+    const response = await this.api.request<{ images: IImage[] }>({
+      route: 'images',
+      method: 'get',
+      query: `tags=${this.tags}&max=${this.maxImagesPerPart}&skip=${this.part *
+        this.maxImagesPerPart}&sort-by=${this.sortBy}`,
+      headers: {
+        'Auth-Token': localStorage.getItem('token')
       }
-    );
-    const all = ((await response.json()) as { images: IImage[] }).images;
+    });
+    const all = response.images;
     if (all.length === 0) {
       return false;
     }
@@ -105,9 +115,6 @@ export class DashPage implements OnInit {
     });
     await modal.present();
     await modal.onDidDismiss();
-    // if (data) {
-    //   image.tags = data.tags as string[];
-    // }
     this.updateTags();
   }
 
@@ -134,5 +141,45 @@ export class DashPage implements OnInit {
     this.part = 0;
     this.updateTags();
     this.getImages();
+  }
+
+  async openSortPopover(ev: MouseEvent) {
+    const po = await this.popover.create({
+      event: ev,
+      component: SortComponent,
+      componentProps: {
+        currentValue: this.sortBy
+      }
+    });
+    await po.present();
+    const { data } = await po.onDidDismiss();
+    if (data.newValue) {
+      if (data.newValue !== this.sortBy) {
+        this.sortBy = data.newValue;
+        this.refresh();
+      }
+    }
+  }
+
+  async openLogoutPopover(event: MouseEvent) {
+    const pop = await this.popover.create({
+      component: LogoutComponent,
+      event
+    });
+    await pop.present();
+    const { data } = await pop.onDidDismiss();
+    if (data.setting as string) {
+      if (data.setting === 'logout') {
+        localStorage.removeItem('token');
+        this.router.navigateByUrl('/login');
+      } else if (data.setting === 'nuke') {
+        localStorage.clear();
+        this.router.navigateByUrl('/login');
+      }
+    }
+  }
+
+  track(idx: number, item: IImage[]) {
+    return item.map(img => img.hash).join('');
   }
 }

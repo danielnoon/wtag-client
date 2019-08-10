@@ -1,0 +1,17 @@
+:host {
+  height: 100%;
+}
+
+.wrapper {
+  display: flex;
+  height: 100%;
+  width: 100%;
+
+  .center {
+    margin: auto;
+
+    .url-item {
+      --background: var(--ion-color-dark-tint);
+    }
+  }
+}

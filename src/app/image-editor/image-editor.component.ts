@@ -13,8 +13,8 @@ import {
   IonInput
 } from '@ionic/angular';
 import { IImage } from 'src/models/image.model';
-import { AddTagComponent } from '../add-tag/add-tag.component';
 import * as Fuse from 'fuse.js';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-image-editor',
@@ -38,7 +38,8 @@ export class ImageEditorComponent implements OnInit {
   constructor(
     navParams: NavParams,
     private modal: ModalController,
-    private popover: PopoverController
+    private popover: PopoverController,
+    private api: ApiService
   ) {
     const image = navParams.get('image') as IImage;
     this.tags = image.tags;
@@ -58,45 +59,27 @@ export class ImageEditorComponent implements OnInit {
   }
 
   async save() {
-    console.log('wtf');
     if (this.tags.length > 1) {
       this.tags = this.tags.filter(tag => tag !== 'untagged');
     }
     if (this.tags.length === 0) {
       this.tags = ['untagged'];
     }
-    const result = await fetch(
-      'https://wtag-api.supermegadex.net/api/v1/apply-tags',
-      {
-        method: 'post',
-        headers: {
-          'Auth-Token': localStorage.getItem('token'),
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          image: this.hash,
-          tags: this.tags
-        })
-      }
-    );
-    const json = (await result.json()) as { success: boolean };
-    if (!json.success) {
-      alert('Something failed.');
-    } else {
+    const result = await this.api.request<{ success: boolean }>({
+      route: 'apply-tags',
+      method: 'post',
+      headers: {
+        'Auth-Token': localStorage.getItem('token'),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        image: this.hash,
+        tags: this.tags
+      })
+    });
+    if (result.success) {
       this.commitSave(this.tags);
     }
-  }
-
-  async openAddTagPopover(ev: MouseEvent) {
-    const pop = await this.popover.create({
-      component: AddTagComponent,
-      event: ev,
-      componentProps: {
-        commit: (tag: string) => (this.tags = [...this.tags, tag]),
-        allTags: this.allTags
-      }
-    });
-    await pop.present();
   }
 
   updateSuggestedTags() {

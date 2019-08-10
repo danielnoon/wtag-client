@@ -12,23 +12,44 @@
         <ion-card-subtitle>Log in</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <ion-list inset="false">
-          <ion-item>
-            <ion-label position="floating">Username</ion-label>
-            <ion-input [(ngModel)]="username"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label position="floating">Password</ion-label>
-            <ion-input [(ngModel)]="password" type="password"></ion-input>
-          </ion-item>
-          <ion-item button detail color="primary" (click)="login()"
-            >Login</ion-item
-          >
-          <ion-item lines="none">
-            <ion-label>Don't have an account? Register now!</ion-label>
-            <ion-button routerLink="/register">Register</ion-button>
-          </ion-item>
-        </ion-list>
+        <form
+          method="post"
+          action="/login"
+          (ngSubmit)="submit()"
+          (keyup.enter)="submit()"
+        >
+          <ion-list inset="false">
+            <ion-item>
+              <ion-label position="floating">Username</ion-label>
+              <ion-input
+                [(ngModel)]="username"
+                name="username"
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Password</ion-label>
+              <ion-input
+                [(ngModel)]="password"
+                type="password"
+                name="password"
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Server URL</ion-label>
+              <ion-input [(ngModel)]="url" name="apiUrl" required></ion-input>
+            </ion-item>
+            <ion-item button type="submit" color="primary" [detail]="false">
+              Login
+              <ion-icon name="log-in" slot="end"></ion-icon>
+            </ion-item>
+          </ion-list>
+        </form>
+        <ion-item lines="none">
+          <ion-label>Don't have an account? Register now!</ion-label>
+          <ion-button routerLink="/register">Register</ion-button>
+        </ion-item>
       </ion-card-content>
     </ion-card>
   </div>

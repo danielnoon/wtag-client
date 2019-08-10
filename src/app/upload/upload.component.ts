@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FileUploader, FileLikeObject } from 'ng2-file-upload';
 import { ModalController } from '@ionic/angular';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-upload',
@@ -11,7 +12,7 @@ export class UploadComponent implements OnInit {
   public uploader: FileUploader;
   public hasBaseDropZoneOver = false;
 
-  constructor(private modal: ModalController) {
+  constructor(private modal: ModalController, private api: ApiService) {
     this.uploader = new FileUploader({
       method: 'put',
       headers: [{ name: 'Auth-Token', value: localStorage.getItem('token') }],
@@ -42,18 +43,19 @@ export class UploadComponent implements OnInit {
     for (const file of files) {
       const fd = new FormData();
       fd.append('image', file.rawFile);
-      const response = await fetch(
-        'https://wtag-api.supermegadex.net/api/v1/new-image',
-        {
-          method: 'put',
-          headers: {
-            'Auth-Token': localStorage.getItem('token')
-          },
-          body: fd
-        }
-      );
-      const json = (await response.json()) as { hash: string };
-      hashes.push(json.hash);
+      const response = await this.api.request<{ hash: string }>({
+        route: 'new-image',
+        query: `name=${file.name}`,
+        method: 'put',
+        headers: {
+          'Auth-Token': localStorage.getItem('token')
+        },
+        body: fd
+      });
+      if (response.hash) {
+        hashes.push(response.hash);
+        this.uploader.queue.shift();
+      }
     }
     this.modal.dismiss();
   }

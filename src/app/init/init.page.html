@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>WTag</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="!loading" class="wrapper">
+    <div *ngIf="authCode" class="center">
+      <h1>Your owner access token is...</h1>
+      <h3>{{ authCode }}</h3>
+      <ion-button routerLink="/register">Proceed</ion-button>
+    </div>
+    <div *ngIf="!authCode" class="center">
+      <div *ngIf="urlReady">
+        <h2>
+          Either a server error has occurred or the owner has already been
+          registered.
+        </h2>
+      </div>
+      <div *ngIf="!urlReady">
+        <form method="post" action="/init" (ngSubmit)="getAuthCode()">
+          <ion-list>
+            <ion-item class="url-item">
+              <ion-label position="floating">API URL</ion-label>
+              <ion-input [(ngModel)]="url" name="url"></ion-input>
+            </ion-item>
+            <ion-item button type="submit" color="primary"
+              >Get Auth Code</ion-item
+            >
+          </ion-list>
+        </form>
+      </div>
+    </div>
+  </div>
+</ion-content>

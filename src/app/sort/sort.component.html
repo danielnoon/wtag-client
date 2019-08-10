@@ -1,0 +1,12 @@
+<ion-content>
+  <ion-list>
+    <ion-item
+      button
+      *ngFor="let option of options"
+      (click)="select(option.value)"
+      [color]="option.value === selected ? 'tertiary' : 'dark'"
+    >
+      {{ option.display }}
+    </ion-item>
+  </ion-list>
+</ion-content>

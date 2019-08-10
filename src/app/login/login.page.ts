@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { sha256 } from 'sha.js';
 import { Router } from '@angular/router';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-login',
@@ -10,23 +11,31 @@ import { Router } from '@angular/router';
 export class LoginPage {
   username: string;
   password: string;
+  url = localStorage.getItem('apiUrl') || '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private api: ApiService) {}
+
+  submit() {
+    this.login();
+  }
 
   async login() {
-    console.log(`Hello, ${this.username}!`);
-    const hashedPw = new sha256().update(this.password + 'wtag').digest('hex');
-    console.log(`Your hashed password is ${hashedPw}`);
-    const result = await fetch(
-      'https://wtag-api.supermegadex.net/api/v1/login',
-      {
+    const correct = await this.api.checkApiUrl(this.url);
+    if (correct) {
+      localStorage.setItem('apiUrl', this.url);
+      const hashedPw = new sha256()
+        .update(this.password + 'wtag')
+        .digest('hex');
+      const result = await this.api.request<{ token: string }>({
+        route: 'login',
         method: 'post',
         body: JSON.stringify({ username: this.username, password: hashedPw }),
         headers: { 'Content-Type': 'application/json' }
+      });
+      if (result.token) {
+        localStorage.setItem('token', result.token);
+        this.router.navigateByUrl('/dash');
       }
-    );
-    const json = (await result.json()) as { token: string };
-    localStorage.setItem('token', json.token);
-    this.router.navigateByUrl('/dash');
+    }
   }
 }

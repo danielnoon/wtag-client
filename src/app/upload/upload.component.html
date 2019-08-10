@@ -21,7 +21,10 @@
       Drop files here...
     </div>
 
-    <div class="add-files-button">
+    <div class="add-files-area">
+      <span class="to-upload"
+        >Files to upload: {{ uploader?.queue?.length }}</span
+      >
       <ion-button class="file-input-container">
         <label>
           <input

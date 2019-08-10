@@ -9,8 +9,9 @@ import { IonicModule } from '@ionic/angular';
 import { DashPage } from './dash.page';
 import { ImageEditorComponent } from '../image-editor/image-editor.component';
 import { UploadComponent } from '../upload/upload.component';
-import { AddTagComponent } from '../add-tag/add-tag.component';
+import { SortComponent } from '../sort/sort.component';
 import { LightboxComponent } from '../lightbox/lightbox.component';
+import { LogoutComponent } from '../logout/logout.component';
 
 const routes: Routes = [
   {
@@ -31,14 +32,16 @@ const routes: Routes = [
     DashPage,
     ImageEditorComponent,
     UploadComponent,
-    AddTagComponent,
-    LightboxComponent
+    SortComponent,
+    LightboxComponent,
+    LogoutComponent
   ],
   entryComponents: [
     ImageEditorComponent,
     UploadComponent,
-    AddTagComponent,
-    LightboxComponent
+    SortComponent,
+    LightboxComponent,
+    LogoutComponent
   ]
 })
 export class DashPageModule {}
