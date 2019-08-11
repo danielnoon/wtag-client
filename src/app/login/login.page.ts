@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { sha256 } from 'sha.js';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -13,13 +14,25 @@ export class LoginPage {
   password: string;
   url = localStorage.getItem('apiUrl') || '';
 
-  constructor(private router: Router, private api: ApiService) {}
+  constructor(
+    private router: Router,
+    private api: ApiService,
+    private loader: LoadingController
+  ) {}
 
   submit() {
     this.login();
   }
 
   async login() {
+    if (!this.username || !this.password || !this.url) {
+      this.api.error('All fields are required.');
+      return;
+    }
+    const spinny = await this.loader.create({
+      message: 'Logging in'
+    });
+    await spinny.present();
     const correct = await this.api.checkApiUrl(this.url);
     if (correct) {
       localStorage.setItem('apiUrl', this.url);
@@ -37,5 +50,6 @@ export class LoginPage {
         this.router.navigateByUrl('/dash');
       }
     }
+    spinny.dismiss();
   }
 }

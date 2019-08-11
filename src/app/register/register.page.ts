@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { sha256 } from 'sha.js';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-register',
@@ -14,13 +15,25 @@ export class RegisterPage {
   url = localStorage.getItem('apiUrl') || '';
   accessCode = localStorage.getItem('initCode') || '';
 
-  constructor(private router: Router, private api: ApiService) {}
+  constructor(
+    private router: Router,
+    private api: ApiService,
+    private loader: LoadingController
+  ) {}
 
   submit() {
     this.register();
   }
 
   async register() {
+    if (!this.accessCode || !this.username || !this.password || !this.url) {
+      this.api.error('All fields are required.');
+      return;
+    }
+    const spinny = await this.loader.create({
+      message: 'Registering'
+    });
+    await spinny.present();
     const correct = await this.api.checkApiUrl(this.url);
     if (correct) {
       const hashedPassword = new sha256()
@@ -43,5 +56,6 @@ export class RegisterPage {
         this.router.navigateByUrl('/dash');
       }
     }
+    spinny.dismiss();
   }
 }

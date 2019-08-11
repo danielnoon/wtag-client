@@ -40,7 +40,7 @@
               <ion-label position="floating">Server URL</ion-label>
               <ion-input [(ngModel)]="url" name="apiUrl" required></ion-input>
             </ion-item>
-            <ion-item button type="submit" color="primary" [detail]="false">
+            <ion-item button type="submit" color="primary" [detail]="false" (click)="submit()">
               Login
               <ion-icon name="log-in" slot="end"></ion-icon>
             </ion-item>

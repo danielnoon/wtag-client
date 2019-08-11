@@ -14,9 +14,6 @@
       <ion-button (click)="openSortPopover($event)">
         <ion-icon icon="funnel" slot="icon-only"></ion-icon>
       </ion-button>
-      <ion-button (click)="openImageUploader()">
-        <ion-icon icon="cloud-upload" slot="icon-only"></ion-icon>
-      </ion-button>
       <ion-button (click)="openLogoutPopover($event)">
         <ion-icon icon="log-out" slot="icon-only"></ion-icon>
       </ion-button>
@@ -54,5 +51,18 @@
       <ion-infinite-scroll-content loadingText="Loading more images...">
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button class="upload-fab" [class.hidden]="showUploader" (click)="openImageUploader()">
+      <ion-icon icon="cloud-upload"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <div class="uploader-container" [class.visible]="showUploader">
+    <div class="uploader-inner">
+      <h3 class="uploader-text">Uploading {{ uploadTotal }} {{ uploadImageOrImages }}, {{ uploadLeft }} left. {{ uploadETR }} more {{uploadMinuteOrMinutes}}.</h3>
+    </div>
+    <ion-progress-bar class="progress-bar" [value]="uploadProgress"></ion-progress-bar>
   </div>
 </ion-content>

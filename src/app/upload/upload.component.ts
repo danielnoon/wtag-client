@@ -39,25 +39,9 @@ export class UploadComponent implements OnInit {
 
   async uploadAll() {
     const files = this.getFiles();
-    const hashes: string[] = [];
-    for (const file of files) {
-      const fd = new FormData();
-      fd.append('image', file.rawFile);
-      const response = await this.api.request<{ hash: string }>({
-        route: 'new-image',
-        query: `name=${file.name}`,
-        method: 'put',
-        headers: {
-          'Auth-Token': localStorage.getItem('token')
-        },
-        body: fd
-      });
-      if (response.hash) {
-        hashes.push(response.hash);
-        this.uploader.queue.shift();
-      }
-    }
-    this.modal.dismiss();
+    this.modal.dismiss({
+      files
+    });
   }
 
   dismiss() {

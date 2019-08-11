@@ -11,6 +11,7 @@ import { ApiService } from '../api.service';
 import { SortComponent } from '../sort/sort.component';
 import { LogoutComponent } from '../logout/logout.component';
 import { Router } from '@angular/router';
+import { FileLikeObject } from 'ng2-file-upload';
 
 @Component({
   selector: 'app-dash',
@@ -26,6 +27,13 @@ export class DashPage implements OnInit {
   maxImagesPerPart = 500;
   columns = 3;
   sortBy = 'name';
+  showUploader = false;
+  uploadProgress = 0.75;
+  uploadTotal = 100;
+  uploadLeft = 25;
+  uploadETR = 2;
+  uploadImageOrImages = 'images';
+  uploadMinuteOrMinutes = 'minutes';
   @ViewChild(IonInfiniteScroll, { static: false })
   infiniteScroll: IonInfiniteScroll;
 
@@ -123,8 +131,11 @@ export class DashPage implements OnInit {
       component: UploadComponent
     });
     await modal.present();
-    await modal.onDidDismiss();
-    this.refresh();
+    const { data } = await modal.onDidDismiss();
+    if (data.files as FileLikeObject[]) {
+      await this.uploadAll(data.files);
+      this.refresh();
+    }
   }
 
   async loadData(ev) {
@@ -181,5 +192,47 @@ export class DashPage implements OnInit {
 
   track(idx: number, item: IImage[]) {
     return item.map(img => img.hash).join('');
+  }
+
+  async uploadAll(files: FileLikeObject[]) {
+    const hashes: string[] = [];
+    const times: number[] = [];
+    this.uploadTotal = files.length;
+    this.uploadLeft = files.length;
+    this.uploadImageOrImages = files.length === 1 ? 'image' : 'images';
+    this.uploadProgress = 0;
+    this.uploadETR = Math.round((5 * this.uploadTotal) / 60);
+    this.uploadMinuteOrMinutes = this.uploadETR === 1 ? 'minute' : 'minutes';
+    this.showUploader = true;
+    for (const file of files) {
+      const start = Date.now();
+      const fd = new FormData();
+      fd.append('image', file.rawFile);
+      const response = await this.api.request<{ hash: string }>({
+        route: 'new-image',
+        query: `name=${file.name}`,
+        method: 'put',
+        headers: {
+          'Auth-Token': localStorage.getItem('token')
+        },
+        body: fd
+      });
+      if (response.hash) {
+        hashes.push(response.hash);
+      }
+      const time = Date.now() - start;
+      times.push(time);
+      this.uploadLeft--;
+      this.uploadProgress =
+        (this.uploadTotal - this.uploadLeft) / this.uploadTotal;
+      this.uploadETR = Math.round(
+        ((times.reduce((acc, cur) => acc + cur, 0) / times.length) *
+          this.uploadLeft) /
+          1000 /
+          60
+      );
+      this.uploadMinuteOrMinutes = this.uploadETR === 1 ? 'minute' : 'minutes';
+    }
+    this.showUploader = false;
   }
 }

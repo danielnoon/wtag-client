@@ -17,3 +17,37 @@
   border: 1px solid var(--ion-color-tertiary);
   cursor: pointer;
 }
+
+.uploader-container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  top: 100vh;
+  z-index: 999;
+  background-color: var(--ion-color-dark-tint);
+  width: 100%;
+  height: 76px;
+  transition: 250ms ease-in-out top;
+
+  &.visible {
+    top: calc(100vh - 76px);
+  }
+}
+
+.uploader-inner {
+  flex: 1 1 auto;
+  display: flex;
+}
+
+.uploader-text {
+  margin: auto;
+}
+
+.upload-fab {
+  transition: 250ms ease-in-out transform;
+  transform: translateY(0);
+
+  &.hidden {
+    transform: translateY(100px);
+  }
+}

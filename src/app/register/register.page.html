@@ -41,12 +41,13 @@
             </ion-item>
             <ion-item
               button
-              detail
-              detailIcon="log-in"
-              color="primary"
               type="submit"
+              color="primary"
+              [detail]="false"
+              (click)="submit()"
             >
               Register
+              <ion-icon name="log-in" slot="end"></ion-icon>
             </ion-item>
           </ion-list>
         </form>
