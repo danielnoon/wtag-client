@@ -1,3 +1,26 @@
-<p>
-  lightbox works!
-</p>
+<div class="arrow-wrapper">
+  <ion-fab-button class="arrow" (click)="getPrev()">
+    <ion-icon name="arrow-back"></ion-icon>
+  </ion-fab-button>
+</div>
+<div class="image-wrapper">
+  <img [src]="url" class="image" />
+</div>
+<div class="arrow-wrapper">
+  <ion-fab-button class="arrow" (click)="getNext()">
+    <ion-icon name="arrow-forward"></ion-icon>
+  </ion-fab-button>
+</div>
+<input
+  type="text"
+  class="events"
+  #events
+  (keydown)="listener($event)"
+  (blur)="refocus()"
+  autofocus
+/>
+<ion-fab vertical="top" horizontal="end">
+  <ion-fab-button size="small" color="light" (click)="dismiss()">
+    <ion-icon name="close"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

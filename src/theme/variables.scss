@@ -5,9 +5,9 @@
 :root {
   /** primary **/
   --ion-color-primary: #967bb6;
-  --ion-color-primary-rgb: 150,123,182;
+  --ion-color-primary-rgb: 150, 123, 182;
   --ion-color-primary-contrast: #000000;
-  --ion-color-primary-contrast-rgb: 0,0,0;
+  --ion-color-primary-contrast-rgb: 0, 0, 0;
   --ion-color-primary-shade: #846ca0;
   --ion-color-primary-tint: #a188bd;
 
@@ -54,7 +54,7 @@
   /** dark **/
   --ion-color-dark: #222428;
   --ion-color-dark-rgb: 34, 34, 34;
-  --ion-color-dark-contrast: #EE82EE;
+  --ion-color-dark-contrast: #ee82ee;
   --ion-color-dark-contrast-rgb: 238, 130, 238;
   --ion-color-dark-shade: #1e2023;
   --ion-color-dark-tint: #383a3e;
@@ -62,7 +62,7 @@
   /** medium **/
   --ion-color-medium: #808080;
   --ion-color-medium-rgb: 152, 154, 162;
-  --ion-color-medium-contrast: #EE82EE;
+  --ion-color-medium-contrast: #ee82ee;
   --ion-color-medium-contrast-rgb: 238, 130, 238;
   --ion-color-medium-shade: #86888f;
   --ion-color-medium-tint: #a2a4ab;
@@ -102,4 +102,8 @@
   --ion-color-step-950: #f3f3f3;
 }
 
-
+.lightbox-modal {
+  --width: 100vw;
+  --height: 100vh;
+  --background: transparent;
+}

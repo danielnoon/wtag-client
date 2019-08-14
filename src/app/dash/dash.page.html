@@ -53,16 +53,38 @@
     </ion-infinite-scroll>
   </div>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button class="upload-fab" [class.hidden]="showUploader" (click)="openImageUploader()">
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed"
+    class="upload-fab"
+    [class.hidden]="showUploader"
+  >
+    <ion-fab-button (click)="openImageUploader()">
       <ion-icon icon="cloud-upload"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
   <div class="uploader-container" [class.visible]="showUploader">
     <div class="uploader-inner">
-      <h3 class="uploader-text">Uploading {{ uploadTotal }} {{ uploadImageOrImages }}, {{ uploadLeft }} left. {{ uploadETR }} more {{uploadMinuteOrMinutes}}.</h3>
+      <h3 class="uploader-text">
+        Uploading {{ uploadTotal }} {{ uploadImageOrImages }},
+        {{ uploadLeft }} left. {{ uploadETR }} more {{ uploadMinuteOrMinutes }}.
+      </h3>
+      <ion-buttons class="cancel-button-wrapper">
+        <ion-button
+          buttonType="icon-only"
+          fill="clear"
+          (click)="cancelUpload()"
+          class="cancel-button"
+        >
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </div>
-    <ion-progress-bar class="progress-bar" [value]="uploadProgress"></ion-progress-bar>
+    <ion-progress-bar
+      class="progress-bar"
+      [value]="uploadProgress"
+    ></ion-progress-bar>
   </div>
 </ion-content>

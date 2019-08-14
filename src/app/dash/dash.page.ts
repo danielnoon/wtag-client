@@ -24,7 +24,7 @@ export class DashPage implements OnInit {
   images: IImage[][] = [];
   allImages: IImage[] = [];
   part = 0;
-  maxImagesPerPart = 500;
+  maxImagesPerPart = 1000;
   columns = 3;
   sortBy = 'name';
   showUploader = false;
@@ -34,6 +34,7 @@ export class DashPage implements OnInit {
   uploadETR = 2;
   uploadImageOrImages = 'images';
   uploadMinuteOrMinutes = 'minutes';
+  uploadCancel = false;
   @ViewChild(IonInfiniteScroll, { static: false })
   infiniteScroll: IonInfiniteScroll;
 
@@ -115,10 +116,12 @@ export class DashPage implements OnInit {
       componentProps: {
         image,
         allTags: this.allTags,
-        commitSave: (tags: string[]) => {
-          console.log(tags);
-          image.tags = tags;
-        }
+        commitSave: (hash: string, tags: string[]) => {
+          this.allImages.find(img => img.hash === hash).tags = tags;
+        },
+        next: (hash: string) => this.getNextImage(hash),
+        prev: (hash: string) => this.getPreviousImage(hash),
+        controller: this.modalController
       }
     });
     await modal.present();
@@ -191,7 +194,7 @@ export class DashPage implements OnInit {
   }
 
   track(idx: number, item: IImage[]) {
-    return item.map(img => img.hash).join('');
+    return item[0].hash;
   }
 
   async uploadAll(files: FileLikeObject[]) {
@@ -232,7 +235,30 @@ export class DashPage implements OnInit {
           60
       );
       this.uploadMinuteOrMinutes = this.uploadETR === 1 ? 'minute' : 'minutes';
+      if (this.uploadCancel) {
+        this.uploadCancel = false;
+        this.showUploader = false;
+        return;
+      }
     }
     this.showUploader = false;
+  }
+
+  getNextImage(hash: string) {
+    const idx = this.allImages.findIndex(img => img.hash === hash);
+    return this.allImages[idx + 1] || false;
+  }
+
+  getPreviousImage(hash: string) {
+    const idx = this.allImages.findIndex(img => img.hash === hash);
+    return this.allImages[idx - 1] || false;
+  }
+
+  cancelUpload() {
+    this.uploadCancel = true;
+
+    setTimeout(() => {
+      this.showUploader = false;
+    }, 5000);
   }
 }

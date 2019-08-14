@@ -23,3 +23,28 @@
 .add-files-button {
   text-align: right;
 }
+
+.drop-text {
+  padding: 10px;
+}
+
+.upload-label {
+  display: inline-block;
+  padding: 10px;
+  background: var(--ion-color-primary);
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--ion-color-primary-shade);
+  }
+}
+
+#upload {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}

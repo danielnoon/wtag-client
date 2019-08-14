@@ -18,46 +18,46 @@
       [uploader]="uploader"
       class="drop-zone"
     >
-      Drop files here...
+      <div class="instructions">
+        <span class="drop-text">Drop files here...</span>
+        <label for="upload" class="upload-label">
+          Or browse images.
+          <ion-ripple-effect></ion-ripple-effect>
+        </label>
+        <input
+          #upload
+          type="file"
+          ng2FileSelect
+          [uploader]="uploader"
+          multiple
+          accept="image/png, image/jpeg"
+          id="upload"
+        />
+      </div>
     </div>
 
     <div class="add-files-area">
       <span class="to-upload"
         >Files to upload: {{ uploader?.queue?.length }}</span
       >
-      <ion-button class="file-input-container">
-        <label>
-          <input
-            type="file"
-            ng2FileSelect
-            [uploader]="uploader"
-            multiple
-            accept="image/png, image/jpeg"
-          />
-          Add Files
-        </label>
-      </ion-button>
     </div>
 
     <div class="files-list">
       <ion-list>
-        <ion-reorder-group
-          (ionItemReorder)="reorderFiles($event)"
-          disabled="false"
-        >
-          <ion-item *ngFor="let item of uploader.queue">
-            <ion-label>
-              {{ item?.file?.name }}
-            </ion-label>
-            <ion-reorder></ion-reorder>
-          </ion-item>
-        </ion-reorder-group>
+        <ion-item *ngFor="let item of uploader.queue; let idx = index">
+          <ion-label>
+            {{ item?.file?.name }}
+          </ion-label>
+          <ion-button (click)="remove(idx)" fill="clear" color="light">
+            <ion-icon name="close" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-item>
       </ion-list>
     </div>
 
-    <ion-fab vertical="bottom" horizontal="end">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
       <ion-fab-button (click)="uploadAll()">
-        <ion-icon icon="cloud-upload"></ion-icon>
+        <ion-icon icon="checkmark"></ion-icon>
       </ion-fab-button>
     </ion-fab>
   </div>

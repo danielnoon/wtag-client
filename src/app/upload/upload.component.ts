@@ -13,11 +13,7 @@ export class UploadComponent implements OnInit {
   public hasBaseDropZoneOver = false;
 
   constructor(private modal: ModalController, private api: ApiService) {
-    this.uploader = new FileUploader({
-      method: 'put',
-      headers: [{ name: 'Auth-Token', value: localStorage.getItem('token') }],
-      url: 'https://wtag-api.supermegadex.net/api/v1/new-image'
-    });
+    this.uploader = new FileUploader({});
   }
 
   ngOnInit() {}
@@ -26,6 +22,10 @@ export class UploadComponent implements OnInit {
     return this.uploader.queue.map(fileItem => {
       return fileItem.file;
     });
+  }
+
+  remove(idx: number) {
+    this.uploader.queue.splice(idx, 1);
   }
 
   fileOverBase(ev): void {

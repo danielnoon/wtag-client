@@ -51,3 +51,11 @@
     transform: translateY(100px);
   }
 }
+
+.cancel-button {
+  --background: transparent;
+}
+
+.cancel-button-wrapper {
+  padding: 10px;
+}

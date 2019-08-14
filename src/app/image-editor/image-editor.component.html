@@ -9,10 +9,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content (keyup)="checkKeyboardInput($event)">
   <div class="top">
     <div class="image-wrapper">
-      <img [src]="imageUrl" class="waifu" />
+      <img [src]="imageUrl" class="waifu" (click)="openLightbox()" />
     </div>
   </div>
   <div class="bottom">
@@ -34,6 +34,7 @@
           [(ngModel)]="newTag"
           (ionChange)="updateSuggestedTags()"
           (keyup)="change($event)"
+          autofocus="true"
         ></ion-input>
       </ion-item>
       <ion-list>
@@ -48,3 +49,14 @@
     </div>
   </div>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goToPrevImage()">Previous</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToNextImage()">Next</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
