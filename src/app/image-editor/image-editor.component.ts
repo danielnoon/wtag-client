@@ -3,12 +3,12 @@ import {
   OnInit,
   ViewChildren,
   QueryList,
-  ViewChild
+  ViewChild,
+  AfterViewInit
 } from '@angular/core';
 import {
   NavParams,
   ModalController,
-  PopoverController,
   IonItem,
   IonInput,
   NavController
