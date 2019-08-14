@@ -4,7 +4,8 @@ import {
   ViewChildren,
   QueryList,
   ViewChild,
-  AfterViewInit
+  AfterViewInit,
+  OnDestroy
 } from '@angular/core';
 import {
   NavParams,
@@ -23,7 +24,7 @@ import { LightboxComponent } from '../lightbox/lightbox.component';
   templateUrl: './image-editor.component.html',
   styleUrls: ['./image-editor.component.scss']
 })
-export class ImageEditorComponent implements OnInit, AfterViewInit {
+export class ImageEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   imageUrl: string;
   hash: string;
   tags: string[];
@@ -39,6 +40,7 @@ export class ImageEditorComponent implements OnInit, AfterViewInit {
   getPrev: (hash: string) => IImage;
   @ViewChildren('suggestion') suggestions: QueryList<IonItem & { el: Element }>;
   @ViewChild('input', { static: false }) input: IonInput & { el: Element };
+  keyboardListener = (ev: KeyboardEvent) => this.checkKeyboardInput(ev);
 
   constructor(
     navParams: NavParams,
@@ -64,7 +66,12 @@ export class ImageEditorComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => this.input.setFocus(), 200);
+    // setTimeout(() => this.input.setFocus(), 200);
+    addEventListener('keydown', this.keyboardListener);
+  }
+
+  ngOnDestroy() {
+    removeEventListener('keydown', this.keyboardListener);
   }
 
   removeTag(idx: number) {

@@ -1,4 +1,10 @@
-import { Component, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  AfterViewInit,
+  ElementRef,
+  OnDestroy
+} from '@angular/core';
 import { NavParams, ModalController } from '@ionic/angular';
 import { IImage } from 'src/models/image.model';
 
@@ -7,7 +13,7 @@ import { IImage } from 'src/models/image.model';
   templateUrl: './lightbox.component.html',
   styleUrls: ['./lightbox.component.scss']
 })
-export class LightboxComponent implements AfterViewInit {
+export class LightboxComponent implements AfterViewInit, OnDestroy {
   hash: string;
   url: string;
   hideNav = false;
@@ -16,6 +22,7 @@ export class LightboxComponent implements AfterViewInit {
   next: (hash: string) => IImage;
   update: (image: IImage) => void;
   @ViewChild('events', { static: false }) events: ElementRef<HTMLInputElement>;
+  keyboardListener = (ev: KeyboardEvent) => this.listener(ev);
 
   constructor(params: NavParams, private modal: ModalController) {
     this.hash = params.get('hash');
@@ -25,10 +32,12 @@ export class LightboxComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.events.nativeElement.focus();
-    }, 10);
     setTimeout(() => (this.hideNav = true), 3000);
+    addEventListener('keydown', this.keyboardListener);
+  }
+
+  ngOnDestroy() {
+    removeEventListener('keydown', this.keyboardListener);
   }
 
   revealNav() {
@@ -40,7 +49,7 @@ export class LightboxComponent implements AfterViewInit {
   }
 
   refocus() {
-    this.events.nativeElement.focus();
+    // this.events.nativeElement.focus();
   }
 
   listener(ev: KeyboardEvent) {
