@@ -1,15 +1,27 @@
-<div class="arrow-wrapper">
-  <ion-fab-button class="arrow" (click)="getPrev()">
+<div
+  class="arrow-wrapper left"
+  [class.hide]="hideNav"
+  (click)="getPrev()"
+  (mousemove)="revealNav()"
+>
+  <ion-fab-button class="arrow">
     <ion-icon name="arrow-back"></ion-icon>
   </ion-fab-button>
+  <ion-ripple-effect type="unbounded"></ion-ripple-effect>
 </div>
 <div class="image-wrapper">
   <img [src]="url" class="image" />
 </div>
-<div class="arrow-wrapper">
-  <ion-fab-button class="arrow" (click)="getNext()">
+<div
+  class="arrow-wrapper right"
+  [class.hide]="hideNav"
+  (click)="getNext()"
+  (mousemove)="revealNav()"
+>
+  <ion-fab-button class="arrow">
     <ion-icon name="arrow-forward"></ion-icon>
   </ion-fab-button>
+  <ion-ripple-effect type="unbounded"></ion-ripple-effect>
 </div>
 <input
   type="text"

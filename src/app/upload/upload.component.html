@@ -37,9 +37,7 @@
     </div>
 
     <div class="add-files-area">
-      <span class="to-upload"
-        >Files to upload: {{ uploader?.queue?.length }}</span
-      >
+      <h3 class="to-upload">Files to upload: {{ uploader?.queue?.length }}</h3>
     </div>
 
     <div class="files-list">
@@ -54,11 +52,11 @@
         </ion-item>
       </ion-list>
     </div>
-
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button (click)="uploadAll()">
-        <ion-icon icon="checkmark"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
   </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="uploadAll()">
+      <ion-icon icon="checkmark"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

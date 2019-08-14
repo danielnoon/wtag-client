@@ -10,6 +10,8 @@ import { IImage } from 'src/models/image.model';
 export class LightboxComponent implements AfterViewInit {
   hash: string;
   url: string;
+  hideNav = false;
+  hideTimeout: NodeJS.Timer;
   prev: (hash: string) => IImage;
   next: (hash: string) => IImage;
   update: (image: IImage) => void;
@@ -26,6 +28,15 @@ export class LightboxComponent implements AfterViewInit {
     setTimeout(() => {
       this.events.nativeElement.focus();
     }, 10);
+    setTimeout(() => (this.hideNav = true), 3000);
+  }
+
+  revealNav() {
+    this.hideNav = false;
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+    }
+    this.hideTimeout = setTimeout(() => (this.hideNav = true), 1000);
   }
 
   refocus() {
