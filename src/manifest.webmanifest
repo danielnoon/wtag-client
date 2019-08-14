@@ -1,6 +1,6 @@
 {
-  "name": "app",
-  "short_name": "app",
+  "name": "WTag",
+  "short_name": "WTag",
   "theme_color": "#967bb6",
   "background_color": "#222428",
   "display": "standalone",
