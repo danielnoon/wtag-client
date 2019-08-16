@@ -12,6 +12,7 @@ import { SortComponent } from '../sort/sort.component';
 import { LogoutComponent } from '../logout/logout.component';
 import { Router } from '@angular/router';
 import { FileLikeObject } from 'ng2-file-upload';
+import { ImportService } from '../import.service';
 
 @Component({
   selector: 'app-dash',
@@ -35,6 +36,7 @@ export class DashPage implements OnInit {
   uploadImageOrImages = 'images';
   uploadMinuteOrMinutes = 'minutes';
   uploadCancel = false;
+  uploadNumImports = 0;
   @ViewChild(IonInfiniteScroll, { static: false })
   infiniteScroll: IonInfiniteScroll;
 
@@ -42,7 +44,8 @@ export class DashPage implements OnInit {
     private modalController: ModalController,
     private api: ApiService,
     private popover: PopoverController,
-    private router: Router
+    private router: Router,
+    private tagImport: ImportService
   ) {}
 
   async ngOnInit() {
@@ -198,10 +201,12 @@ export class DashPage implements OnInit {
   }
 
   async uploadAll(files: FileLikeObject[]) {
-    const hashes: string[] = [];
     const times: number[] = [];
-    this.uploadTotal = files.length;
-    this.uploadLeft = files.length;
+    this.uploadTotal = files.filter(
+      file => file.type.split('/')[0] === 'image'
+    ).length;
+    this.uploadNumImports = files.length - this.uploadTotal;
+    this.uploadLeft = this.uploadTotal;
     this.uploadImageOrImages = files.length === 1 ? 'image' : 'images';
     this.uploadProgress = 0;
     this.uploadETR = Math.round((5 * this.uploadTotal) / 60);
@@ -209,32 +214,45 @@ export class DashPage implements OnInit {
     this.showUploader = true;
     for (const file of files) {
       const start = Date.now();
-      const fd = new FormData();
-      fd.append('image', file.rawFile);
-      const response = await this.api.request<{ hash: string }>({
-        route: 'new-image',
-        query: `name=${file.name}`,
-        method: 'put',
-        headers: {
-          'Auth-Token': localStorage.getItem('token')
-        },
-        body: fd
-      });
-      if (response.hash) {
-        hashes.push(response.hash);
+      if (file.name.split('.').reverse()[0] === 'wtags') {
+        const reader = new FileReader();
+        reader.onload = evt => {
+          const target = (evt.target as unknown) as { result: string };
+          const tags = this.tagImport.formatTags(target.result);
+          this.tagImport.addTags({ fileName: file.name, tags });
+        };
+        reader.readAsText((file.rawFile as unknown) as Blob);
+      } else if (file.type.split('/')[0] === 'image') {
+        const fd = new FormData();
+        fd.append('image', file.rawFile);
+        const response = await this.api.request<{ hash: string }>({
+          route: 'new-image',
+          query: `name=${file.name}`,
+          method: 'put',
+          headers: {
+            'Auth-Token': localStorage.getItem('token')
+          },
+          body: fd
+        });
+        if (response.hash) {
+          this.tagImport.publish({ fileName: file.name, hash: response.hash });
+        }
+        const time = Date.now() - start;
+        times.push(time);
+        this.uploadLeft--;
+        this.uploadProgress =
+          (this.uploadTotal - this.uploadLeft) / this.uploadTotal;
+        this.uploadETR = Math.round(
+          ((times.reduce((acc, cur) => acc + cur, 0) / times.length) *
+            this.uploadLeft) /
+            1000 /
+            60
+        );
+        this.uploadMinuteOrMinutes =
+          this.uploadETR === 1 ? 'minute' : 'minutes';
+      } else {
+        break;
       }
-      const time = Date.now() - start;
-      times.push(time);
-      this.uploadLeft--;
-      this.uploadProgress =
-        (this.uploadTotal - this.uploadLeft) / this.uploadTotal;
-      this.uploadETR = Math.round(
-        ((times.reduce((acc, cur) => acc + cur, 0) / times.length) *
-          this.uploadLeft) /
-          1000 /
-          60
-      );
-      this.uploadMinuteOrMinutes = this.uploadETR === 1 ? 'minute' : 'minutes';
       if (this.uploadCancel) {
         this.uploadCancel = false;
         this.showUploader = false;
@@ -259,6 +277,7 @@ export class DashPage implements OnInit {
 
     setTimeout(() => {
       this.showUploader = false;
+      this.uploadCancel = false;
     }, 5000);
   }
 }
