@@ -36,6 +36,7 @@ export class RegisterPage {
     await spinny.present();
     const correct = await this.api.checkApiUrl(this.url);
     if (correct) {
+      localStorage.setItem('apiUrl', this.url);
       const hashedPassword = new sha256()
         .update(this.password + 'wtag')
         .digest('hex');
