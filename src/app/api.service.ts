@@ -1,24 +1,24 @@
-import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { ToastController } from '@ionic/angular';
+import { Injectable } from "@angular/core";
+import { environment } from "src/environments/environment";
+import { ToastController } from "@ionic/angular";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class ApiService {
   constructor(private toastController: ToastController) {}
 
   getBaseUrl() {
-    return localStorage.getItem('apiUrl') || environment.apiUrl;
+    return localStorage.getItem("apiUrl") || environment.apiUrl;
   }
 
   constructEndpoint(route: string, query?: string) {
-    return `${this.getBaseUrl()}/api/v1/${route}${query ? '?' + query : ''}`;
+    return `${this.getBaseUrl()}/api/v1/${route}${query ? "?" + query : ""}`;
   }
 
   async request<T>(options: {
     route: string;
-    method: 'get' | 'post' | 'put' | 'delete';
+    method: "get" | "post" | "put" | "delete";
     headers?: any;
     query?: string;
     body?: string | FormData;
@@ -28,7 +28,7 @@ export class ApiService {
       const response = await fetch(this.constructEndpoint(route, query), {
         method,
         headers,
-        body
+        body,
       });
       const json = await response.json();
       if (json.statusCode && json.statusCode >= 400) {
@@ -43,22 +43,22 @@ export class ApiService {
   async checkApiUrl(url: string) {
     const response = await fetch(url);
     const txt = await response.text();
-    if (txt === 'Hello World!') {
+    if (txt === "This WTag server is working properly!") {
       return true;
     } else {
-      this.error('Provided API URL is not valid.');
+      this.error("Provided API URL is not valid.");
       return false;
     }
   }
 
   async error(message: string) {
     const toast = await this.toastController.create({
-      color: 'danger',
+      color: "danger",
       message,
-      showCloseButton: true,
+      // showCloseButton: true,
       // enterAnimation:
-      position: 'bottom',
-      duration: 4000
+      position: "bottom",
+      duration: 4000,
     });
     toast.present();
   }
